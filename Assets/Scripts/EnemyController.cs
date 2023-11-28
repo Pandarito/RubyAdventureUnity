@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
     public AudioClip hitSound;
 
     AudioSource audioSource;
-
+    private RubyController rubyController;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +31,25 @@ public class EnemyController : MonoBehaviour
         timer = changeTime;
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        GameObject rubyControllerObject = GameObject.FindWithTag("RubyController"); //this line of code finds the RubyController script by looking for a "RubyController" tag on Ruby
+
+        if (rubyControllerObject != null)
+
+        {
+
+            rubyController = rubyControllerObject.GetComponent<RubyController>(); //and this line of code finds the rubyController and then stores it in a variable
+
+            print("Found the RubyConroller Script!");
+
+        }
+
+        if (rubyController == null)
+
+        {
+
+            print("Cannot find GameController Script!");
+
+        }
     }
 
     void Update()
@@ -78,7 +97,7 @@ public class EnemyController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        RubyController player = other.gameObject.GetComponent<RubyController >();
+        RubyController player = other.gameObject.GetComponent<RubyController>();
 
         if (player != null)
         {
@@ -97,6 +116,7 @@ public class EnemyController : MonoBehaviour
 
         smokeEffect.Stop();
         PlaySound(fixedSound);
+        rubyController.ChangeScore(1);
     }
 
     public void PlaySound(AudioClip clip)

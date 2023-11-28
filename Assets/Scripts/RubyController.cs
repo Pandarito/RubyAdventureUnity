@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class RubyController : MonoBehaviour
 {
@@ -28,6 +30,12 @@ public class RubyController : MonoBehaviour
     Vector2 lookDirection = new Vector2(1, 0);
 
     AudioSource audioSource;
+    public int score = 0;
+    public TMP_Text scoreUI;
+    public GameObject winUI;
+    public GameObject loseUI;
+    public bool gameOver = false;
+    public GameObject[] enemyObjects;
 
     // Start is called before the first frame update
     void Start()
@@ -38,14 +46,21 @@ public class RubyController : MonoBehaviour
         currentHealth = maxHealth;
 
         audioSource = GetComponent<AudioSource>();
+        enemyObjects = GameObject.FindGameObjectsWithTag("EnemyController");
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
+        if (!gameOver)
+        {
+            horizontal = Input.GetAxis("Horizontal");
+            vertical = Input.GetAxis("Vertical");
+        }
+        if (score >= enemyObjects.Length)
+        {
+            WinGame();
+        }
         Vector2 move = new Vector2(horizontal, vertical);
 
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
@@ -82,6 +97,23 @@ public class RubyController : MonoBehaviour
                 }
             }
         }
+        if (gameOver)
+        {
+            rigidbody2d.constraints = RigidbodyConstraints2D.FreezePosition;
+            if (Input.GetKey(KeyCode.R))
+
+            {
+
+                if (gameOver == true)
+
+                {
+
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // this loads the currently active scene
+
+                }
+
+            }
+        }
     }
 
     void FixedUpdate()
@@ -109,6 +141,26 @@ public class RubyController : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
 
         UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
+        if (currentHealth <= 0)
+        {
+            LoseGame();
+        }
+    }
+    public void LoseGame()
+    {
+        loseUI.SetActive(true);
+        gameOver = true;
+    }
+    public void WinGame()
+    {
+        winUI.SetActive(true);
+        gameOver = true;
+    }
+    public void ChangeScore(int amount)
+    {
+        score += amount;
+
+        scoreUI.text = score.ToString();
     }
 
     void Launch()
