@@ -26,6 +26,9 @@ public class RubyController : MonoBehaviour
     float horizontal;
     float vertical;
 
+    public GameObject healthIncreaseParticlePrefab;
+    public GameObject healthDecreaseParticlePrefab;
+
     Animator animator;
     Vector2 lookDirection = new Vector2(1, 0);
 
@@ -135,8 +138,15 @@ public class RubyController : MonoBehaviour
             isInvincible = true;
             invincibleTimer = timeInvincible;
 
+            Instantiate(healthDecreaseParticlePrefab, transform.position, Quaternion.identity);
+
             PlaySound(hitSound);
         }
+        else if (amount > 0)
+        {
+            Instantiate(healthIncreaseParticlePrefab, transform.position, Quaternion.identity);
+        }
+        
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
 
