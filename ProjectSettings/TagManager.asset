@@ -6,6 +6,8 @@ TagManager:
   tags:
   - RubyController
   - EnemyController
+  - gem
+  - berry
   layers:
   - Default
   - TransparentFX

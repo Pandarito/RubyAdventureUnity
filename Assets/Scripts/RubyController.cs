@@ -156,6 +156,10 @@ public class RubyController : MonoBehaviour
             LoseGame();
         }
     }
+     public void ChangeSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+    }
     public void LoseGame()
     {
         loseUI.SetActive(true);
